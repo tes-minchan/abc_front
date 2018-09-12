@@ -41,7 +41,7 @@ class Orderbook extends Component {
           </tr>
         )
       });
-      this.priceGap = util.expressKRW(askPrice-bidPrice);
+      this.priceGap = util.expressKRW(bidPrice - askPrice);
 
     }
 
