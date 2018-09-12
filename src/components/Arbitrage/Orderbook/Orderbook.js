@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+
+import * as util from "lib/utils";
 import './Orderbook.css';
 
 class Orderbook extends Component {
@@ -22,8 +23,8 @@ class Orderbook extends Component {
 
         return (
           <tr>
-            <td style={{ width: "100px", color: "#c8d6e5" }}>{item.volume}</td>
-            <td style={{ width: "100px", color: "rgb(226, 19, 70)" }}>{item.price}</td>
+            <td style={{ width: "100px", color: "#c8d6e5" }}>{util.paddingZero(item.volume, 7)}</td>
+            <td style={{ width: "100px", color: "rgb(226, 19, 70)" }}>{util.expressKRW(item.price)}</td>
             <td style={{ width: "100px", color: "#8395a7" }}>{item.market}</td>
           </tr>
         )
@@ -34,13 +35,13 @@ class Orderbook extends Component {
 
         return (
           <tr>
-            <td style={{ width: "100px", color: "#c8d6e5" }}>{item.volume}</td>
-            <td style={{ width: "100px", color: "rgb(82, 176, 120)" }}>{item.price}</td>
+            <td style={{ width: "100px", color: "#c8d6e5" }}>{util.paddingZero(item.volume, 7)}</td>
+            <td style={{ width: "100px", color: "rgb(82, 176, 120)" }}>{util.expressKRW(item.price)}</td>
             <td style={{ width: "100px", color: "#8395a7" }}>{item.market}</td>
           </tr>
         )
       });
-      this.priceGap = askPrice-bidPrice;
+      this.priceGap = util.expressKRW(askPrice-bidPrice);
 
     }
 

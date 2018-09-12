@@ -18,8 +18,7 @@ class Arbitrage extends Component {
       subscribeCoin : 'BTC'
     };
 
-    this.coinList = ['BTC', 'ETH', 'EOS', 'BCH', 'BTG', 'ETC', 'XRP', 'REP' ];
-
+    this.coinList = [ 'BTC' , 'BCH' , 'EOS' , 'ETC' , 'ETH' , 'LTC' , 'OMG' , 'QTUM' , 'XRP' , 'ZIL'];
   }
 
   componentDidMount() {
@@ -39,7 +38,6 @@ class Arbitrage extends Component {
     if(token) {
       Api.GetBalance(token)
         .then(data => {
-          console.log(data);
           if(data) {
             this.setState({
               wallet: data.message

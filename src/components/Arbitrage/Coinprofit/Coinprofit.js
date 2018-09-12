@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
-import * as Api from 'lib/api';
 import * as util from "lib/utils";
 
 import './Coinprofit.css';

@@ -47,7 +47,7 @@ class Ordersend extends Component {
         const element = this.calculateBenefit(orderbook);
         return (
           <Fragment>
-            <span className="ordersend-market-title">{ element.askMarket }</span>
+            <span className="ordersend-market-title" style={{color : "rgb(226, 19, 70)"}}>{ element.askMarket }</span>
             <table className="ordersend-table">
               <tbody>
                 <tr>
@@ -73,12 +73,12 @@ class Ordersend extends Component {
         const element = this.calculateBenefit(orderbook);
         return (
           <Fragment>
-            <span className="ordersend-market-title">{ element.bidMarket }</span>
+            <span className="ordersend-market-title" style={{color : "rgb(82, 176, 120)"}}>{ element.bidMarket }</span>
             <table className="ordersend-table">
               <tbody>
                 <tr>
                   <td style={{ textAlign:"left"}}>COIN Balance</td>
-                  <td style={{ color:"gold", textAlign:"right" }}> ₩ { wallet[element.bidMarket][coinName] ? wallet[element.bidMarket][coinName].available : 0 }</td>
+                  <td style={{ color:"gold", textAlign:"right" }}> { wallet[element.bidMarket][coinName] ? wallet[element.bidMarket][coinName].available : 0 } {coinName}</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>Required Funds</td>
