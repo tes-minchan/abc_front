@@ -1,0 +1,27 @@
+
+.form-wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+  text-align: center;
+  background: #eee !important;
+
+}
+
+.form-wrapper .form-text {
+  font-size: 1rem;
+  height: 30px;
+  width: 200px;
+}
+
+.form-wrapper .signin-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}

@@ -1,0 +1,38 @@
+
+.arbitrage-wrapper {
+  margin-top: 40px;
+  text-align: center;
+  
+}
+
+
+.arbitrage-grid-container {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  padding: 10px;
+}
+
+.arbitrage-grid-item {
+  padding: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.coin-select-button {
+  height: 30px;
+  padding-left:10px;
+  margin-left: 10px;
+}
+
+.coin-selected-button {
+  height: 30px;
+  padding-left:10px;
+  margin-left: 10px;
+  background-color: goldenrod;
+}
+
+.coin-title {
+  font-size: 30px;
+  color: whitesmoke;
+
+}

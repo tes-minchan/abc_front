@@ -1,0 +1,22 @@
+.coinprofit-wrapper {
+  display: inline-block;
+}
+
+.coinprofit-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 600px;
+  padding-top : 6px;
+  padding-bottom : 6px;
+  font-size: 15px;
+
+}
+
+.coinprofit-table td, th{
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+
+  text-align: center;
+  padding: 1px;
+  width : 10%;
+}

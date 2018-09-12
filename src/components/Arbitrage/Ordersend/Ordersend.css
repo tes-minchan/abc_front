@@ -1,0 +1,43 @@
+
+.ordersend-grid-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+.ordersend-grid-item {
+  font-size: 14px;
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.ordersend-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+
+  
+}
+
+.ordersend-table tbody {
+  color : whitesmoke;
+  width: 100%;
+
+}
+
+.ordersend-table td, th{
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+
+  text-align: center;
+  padding: 5px;
+}
+
+.ordersend-market-title {
+  color : white;
+  font-size: 19px;
+  padding-bottom: 20px;
+  display: block;
+}

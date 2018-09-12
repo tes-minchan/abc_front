@@ -1,0 +1,18 @@
+.arbitrage-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.arbitrage-table td, th{
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+
+  text-align: center;
+  padding: 1px;
+}
+
+.arbitrage-pricegap {
+  color:goldenrod;
+  text-align: center;
+}
