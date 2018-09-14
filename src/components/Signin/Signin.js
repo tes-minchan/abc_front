@@ -38,7 +38,8 @@ class Signin extends Component {
       });
     }, (err) => {
       // Need to error control
-      alert(err.response.data.message);
+      console.log(err);
+      // alert(err.response.data.message);
     });
 
   }

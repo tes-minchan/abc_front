@@ -129,7 +129,6 @@ class Arbitrage extends Component {
     this.setState({
       subscribeCoin : e.target.id
     });
-    console.log("change the default coin");
     this.sendCoinSubscribe();
 
   }

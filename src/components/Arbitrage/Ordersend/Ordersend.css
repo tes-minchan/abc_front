@@ -41,3 +41,53 @@
   padding-bottom: 20px;
   display: block;
 }
+
+.ordersend-buy-btn {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  width: 200px;
+  background: rgb(226, 19, 70);
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 17px;
+  transition: all 0.3s;
+  margin-top: 15px;
+  font-weight: 400;
+  height: 30px;
+  padding-top: 3px;
+
+}
+
+.ordersend-sell-btn {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  width: 200px;
+  background: rgb(82, 176, 120);
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 17px;
+  transition: all 0.3s;
+  margin-top: 15px;
+  font-weight: 400;
+  height: 30px;
+  padding-top: 3px;
+
+}
+
+.ordersend-arbi-btn {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  width: 200px;
+  background: #40407a;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 17px;
+  transition: all 0.3s;
+  margin-top: 15px;
+  font-weight: 400;
+  height: 30px;
+  padding: 0;
+}
