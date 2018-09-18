@@ -76,3 +76,37 @@ export const getMarketSubs = (token) => {
   }); 
 
 }
+
+export const getOrderinfo = (token) => {
+  const baseUrl = API_URL+'market/orderinfo-get';
+  return axios.get(
+    baseUrl, 
+    {
+      headers: {
+      "x-access-token": token
+      }
+    }
+    
+  ).then(res => res.data)
+  .catch(error => {
+    throw error
+  }); 
+}
+
+
+export const getOrderdetail = (token) => {
+  const baseUrl = API_URL+'market/orderdetail-get';
+  return axios.get(
+    baseUrl, 
+    {
+      headers: {
+      "x-access-token": token
+      }
+    }
+    
+  ).then(res => res.data)
+  .catch(error => {
+    throw error
+  }); 
+
+}

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
+
 import _ from 'lodash';
 
 import * as Api from 'lib/api';
@@ -8,6 +10,8 @@ import './Arbitrage.css';
 import Orderbook from './Orderbook';
 import Coinprofit from './Coinprofit';
 import Ordersend from './Ordersend';
+import Orderinfo from './Orderinfo';
+import Orderdetail from './Orderdetail';
 
 class Arbitrage extends Component {
 
@@ -15,7 +19,8 @@ class Arbitrage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subscribeCoin : 'BTC'
+      subscribeCoin : 'BTC',
+      redirect : false
     };
 
     this.coinList = [ 'BTC' , 'BCH' , 'EOS' , 'ETC' , 'ETH' , 'LTC' , 'OMG' , 'QTUM' , 'XRP' , 'ZIL'];
@@ -49,7 +54,11 @@ class Arbitrage extends Component {
         });
     }
     else {
+      
       alert("Token is null, Need to signin");
+      this.setState({
+        redirect : true
+      })
     }
   }
 
@@ -105,6 +114,7 @@ class Arbitrage extends Component {
 
   onSocketMessage = (message) => {
     const parseJson = JSON.parse(message);
+
     let setEnable = true;
 
     _.forEach(parseJson, (item, key) => {
@@ -126,49 +136,67 @@ class Arbitrage extends Component {
 
 
   onClickSelCoin = (e) => {
-    this.setState({
-      subscribeCoin : e.target.id
-    });
-    this.sendCoinSubscribe();
-
+    if(e.target.id !== this.state.subscribeCoin) {
+      this.setState({
+        subscribeCoin : e.target.id
+      });
+      this.sendCoinSubscribe();
+    }
   }
 
   render() {
-    return (
-      <div className="arbitrage-wrapper">
-        <span className="coin-title"> { this.state.orderbook ? this.state.orderbook.coinName : null} </span>
-        <p>
-          {
-            this.coinList.map(coin => {
-              if(coin === this.state.subscribeCoin) {
-                return <button className="coin-selected-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
-              }
-              else {
-                return <button className="coin-select-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
-              }
-            })
-          }
-        </p>
-        <p>
-          <Coinprofit coinName={this.state.subscribeCoin} orderbook = {this.state.orderbook}/>
-        </p>
+    if(this.state.redirect) {
+      return <Redirect to='/' />
 
-        <div className="arbitrage-grid-container">
+    }
+    else {
 
-          <div className="arbitrage-grid-item">
-            <Orderbook orderbook={this.state.orderbook} />
+      return (
+        <div className="arbitrage-wrapper">
+          <span className="coin-title"> { this.state.orderbook ? this.state.orderbook.coinName : null} </span>
+          <p>
+            {
+              this.coinList.map(coin => {
+                if(coin === this.state.subscribeCoin) {
+                  return <button className="coin-selected-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
+                }
+                else {
+                  return <button className="coin-select-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
+                }
+              })
+            }
+          </p>
+          <p>
+            <Coinprofit coinName={this.state.subscribeCoin} orderbook = {this.state.orderbook}/>
+          </p>
+  
+          <div className="arbitrage-grid-container">
+  
+            <div className="arbitrage-grid-item">
+              <Orderbook orderbook={this.state.orderbook} />
+            </div>
+            <div className="arbitrage-grid-item">
+              <Ordersend 
+                coinName  = {this.state.subscribeCoin} 
+                wallet    = {this.state.wallet ? this.state.wallet : null} 
+                orderbook = {this.state.orderbook}
+              />
+            </div>
+  
           </div>
-          <div className="arbitrage-grid-item">
-            <Ordersend 
-              coinName  = {this.state.subscribeCoin} 
-              wallet    = {this.state.wallet ? this.state.wallet : null} 
-              orderbook = {this.state.orderbook}
-            />
+  
+          <div style={{color:"white"}}>
+            <Orderinfo />
           </div>
-
+  
+          <div style={{color : "white"}}>
+            <Orderdetail />
+          </div>
+  
+  
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 

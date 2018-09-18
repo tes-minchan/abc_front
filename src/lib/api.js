@@ -8,6 +8,8 @@ export const GetMarketSubs = Api.getMarketSubs;
 /* Market API */
 export const GetBalance = Api.getBalance;
 export const OrderSend  = Api.orderSend;
+export const GetOrderinfo  = Api.getOrderinfo;
+export const GetOrderdetail  = Api.getOrderdetail;
 
 
 

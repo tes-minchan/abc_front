@@ -1,19 +1,19 @@
 
 export const orderinfo = {
   BITHUMB : {
-    BTC : { minVol : 0.0001 },
-    ETH : { minVol : 0.001 },
-    LTC : { minVol : 0.001 },
-    ETC : { minVol : 0.01 },
-    XRP : { minVol : 1 },
-    BCH : { minVol : 0.0001 },
-    QTUM : { minVol : 0.01 },
-    EOS : { minVol : 0.1 },
-    BTG : { minVol : 0.01 },
-    OMG : { minVol : 0.01 },
+    BTC : { minVol : 0.001 },
+    ETH : { minVol : 0.01 },
+    LTC : { minVol : 0.01 },
+    ETC : { minVol : 0.1 },
+    XRP : { minVol : 10 },
+    BCH : { minVol : 0.01 },
+    QTUM : { minVol : 1 },
+    EOS : { minVol : 1 },
+    BTG : { minVol : 0.1 },
+    OMG : { minVol : 0.1 },
     ZIL : { minVol : 10 },
-    ZRX : { minVol : 0.1 },
-    REP : { minVol : 0.01 },
+    ZRX : { minVol : 1 },
+    REP : { minVol : 0.1 },
   },
 
   COINONE : {

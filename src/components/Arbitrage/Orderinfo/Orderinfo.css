@@ -1,0 +1,36 @@
+.orderinfo-wrap {
+
+  padding: 10px;
+}
+
+
+.orderinfo-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  margin-top : 20px;
+
+}
+
+.orderinfo-table td, th{
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+
+  text-align: center;
+  padding: 1px;
+
+}
+
+.orderinfo-table tr:nth-child(1) {
+  font-size: 23px;
+  color:gray;
+
+}
+
+.orderinfo-table td:nth-child(1) {
+  padding-left : 100px;
+
+  width: 200px;
+}

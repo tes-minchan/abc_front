@@ -41,8 +41,8 @@ class Ordersend extends Component {
     const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
     const parseBid = orderbook[`${orderbook.coinName}_BID`].slice(0,10)[0];
     const element = this.calculateBenefit(orderbook);
-    const tradeVol = util.convertFloatDigit(Number(element.minimumVol * this.state.tradeVol), 6);
-    
+    const tradeVol = util.convertFloatDigit(Number(element.minimumVol * this.state.tradeVol), 4);
+
     let buyEnable = await this.checkAskVolume(coinName, element, parseAsk, tradeVol, wallet);
     let sellEnable = await this.checkBidVolume(coinName, element, parseBid, tradeVol, wallet);
 
@@ -218,7 +218,7 @@ class Ordersend extends Component {
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>Volume </td>
-                  <td style={{ color:"rgb(226, 19, 70)", textAlign:"right" }}> {util.convertFloatDigit(element.askVolume * this.state.tradeVol, 6)} </td>
+                  <td style={{ color:"rgb(226, 19, 70)", textAlign:"right" }}> {util.convertFloatDigit(element.askVolume * this.state.tradeVol, 4)} </td>
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>tradeMinVol</td>
@@ -258,7 +258,7 @@ class Ordersend extends Component {
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>Volume </td>
-                  <td style={{ color:"rgb(82, 176, 120)", textAlign:"right" }}> {util.convertFloatDigit(element.bidVolume * this.state.tradeVol, 6)} </td>
+                  <td style={{ color:"rgb(82, 176, 120)", textAlign:"right" }}> {util.convertFloatDigit(element.bidVolume * this.state.tradeVol, 4)} </td>
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>tradeMinVol</td>
@@ -279,10 +279,17 @@ class Ordersend extends Component {
     const arbitrageArea = () => {
       if(wallet && orderbook) {
         const element = this.calculateBenefit(orderbook);
+        const tradeVol = util.convertFloatDigit(element.minimumVol * this.state.tradeVol, 4);
+        let profit = Number(element.bidPrice) - Number(element.askPrice);
+        profit = profit * tradeVol;
+
         return (
           <Fragment>
             <p style={{color:"whiteSmoke" , fontSize : "20px"}}>
-              Trade Volume : { util.convertFloatDigit(element.minimumVol * this.state.tradeVol, 6) }
+              Trade Volume : { tradeVol }
+            </p>
+            <p style={{color:"whiteSmoke" , fontSize : "20px"}}>
+              Profit : ₩ { util.expressKRW(profit) }
             </p>
             <button className="ordersend-arbi-btn" id={"ARBITRAGE"} onClick={this.onClickArb}>ARBITRAGE</button>
 
