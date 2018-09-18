@@ -11,7 +11,6 @@ import Orderbook from './Orderbook';
 import Coinprofit from './Coinprofit';
 import Ordersend from './Ordersend';
 import Orderinfo from './Orderinfo';
-import Orderdetail from './Orderdetail';
 
 class Arbitrage extends Component {
 
