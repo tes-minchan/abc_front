@@ -37,11 +37,11 @@ class Arbitrage extends Component {
     this.socket.onmessage = (m) => this.onSocketMessage(m.data);
     this.socket.onclose = () => this.onSocketClose()
 
-    const token = sessionStorage.getItem('token');
+    this.token = sessionStorage.getItem('token');
 
     // Get User Wallet Info.
-    if(token) {
-      Api.GetBalance(token)
+    if(this.token) {
+      Api.GetBalance(this.token)
         .then(data => {
           if(data) {
             this.setState({
@@ -52,6 +52,26 @@ class Arbitrage extends Component {
         .catch(error => {
           console.log(error);
         });
+
+      Api.GetOrderinfo(this.token)
+      .then(res => {
+        this.setState({
+          pendding_orders : res.message
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  
+      Api.GetOrderdetail(this.token)
+      .then(res => {
+        this.setState({
+          completed_orders : res.message
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      });
     }
     else {
       
@@ -60,6 +80,9 @@ class Arbitrage extends Component {
         redirect : true
       })
     }
+
+
+    
   }
 
   onSocketOpen = () => {
@@ -133,7 +156,55 @@ class Arbitrage extends Component {
 
   }
 
+  onClickRefreshWallet = () => {
+    Api.GetBalance(this.token)
+    .then(data => {
+      if(data) {
+        alert("wallet refresh success");
+        this.setState({
+          wallet: data.message
+        });
+      }
+    })
+    .catch(error => {
+      alert("wallet refresh error");
+      console.log(error);
+    });
+  }
 
+  onClickRefreshOrderinfo = () => {
+    console.log(1, "onClickRefreshOrderinfo");
+    if(this.token) {
+      console.log(2, "onClickRefreshOrderinfo");
+
+      Api.RefreshOrders(this.token)
+        .then(res => {
+          Api.GetOrderinfo(this.token)
+          .then(res => {
+            this.setState({
+              pendding_orders : res.message
+            })
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      
+          Api.GetOrderdetail(this.token)
+          .then(res => {
+            this.setState({
+              completed_orders : res.message
+            })
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+
+  }
 
   onClickSelCoin = (e) => {
     if(e.target.id !== this.state.subscribeCoin) {
@@ -166,6 +237,7 @@ class Arbitrage extends Component {
               })
             }
           </p>
+
           <p>
             <Coinprofit coinName={this.state.subscribeCoin} orderbook = {this.state.orderbook}/>
           </p>
@@ -175,24 +247,30 @@ class Arbitrage extends Component {
             <div className="arbitrage-grid-item">
               <Orderbook orderbook={this.state.orderbook} />
             </div>
+            
             <div className="arbitrage-grid-item">
+              <button className="coin-select-button" onClick={this.onClickRefreshWallet}> WALLET REFRESH </button>
+              <br /><br />
+
               <Ordersend 
                 coinName  = {this.state.subscribeCoin} 
                 wallet    = {this.state.wallet ? this.state.wallet : null} 
                 orderbook = {this.state.orderbook}
+                orderRefresh = {this.onClickRefreshOrderinfo}
+                walletRefresh = {this.onClickRefreshWallet}
               />
             </div>
   
           </div>
-  
+          <button className="coin-select-button" onClick={this.onClickRefreshOrderinfo}> Order Refresh </button>
+
           <div style={{color:"white"}}>
-            <Orderinfo />
+            <Orderinfo 
+              pendingOrders = {this.state.pendding_orders ? this.state.pendding_orders : null } 
+              completedOrders = {this.state.completed_orders ? this.state.completed_orders : null }
+            />
+
           </div>
-  
-          <div style={{color : "white"}}>
-            <Orderdetail />
-          </div>
-  
   
         </div>
       );

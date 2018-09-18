@@ -9,37 +9,14 @@ class Orderinfo extends Component {
     this.state = {
     };
     
-    this.token = sessionStorage.getItem('token');
-
-    Api.GetOrderinfo(this.token)
-      .then(res => {
-        this.setState({
-          orderinfo : res.message
-        })
-      })
-      .catch(err => {
-        console.log(err);
-      })
-
-  }
-
-  onClickRefreshOrderinfo = () => {
-    Api.GetOrderinfo(this.token)
-    .then(res => {
-      this.setState({
-        orderinfo : res.message
-      })
-    })
-    .catch(err => {
-      console.log(err);
-    })
   }
 
   render() {
+    const {pendingOrders, completedOrders} = this.props;
 
-    const orderinfoArea = this.state.orderinfo ? 
+    const pendingOrderinfoArea = pendingOrders ? 
       (
-        this.state.orderinfo.map(item => {
+        pendingOrders.map(item => {
           return (
             <tr>
               <td>{item.reg_date}</td>
@@ -50,14 +27,32 @@ class Orderinfo extends Component {
               <td>{item.remain_volume}</td>
               <td>{item.side}</td>
               <td>{item.market_status}</td>
-              <td>{item.status}</td>
             </tr>
           )
         })
         
       )
     : null;
-    
+
+    const completedOrderinfoArea = completedOrders ? 
+    (
+      completedOrders.map(item => {
+        return (
+          <tr>
+            <td>{item.trade_date}</td>
+            <td>{item.market}</td>
+            <td>{item.currency}</td>
+            <td>{item.price}</td>
+            <td>{item.volume}</td>
+            <td>{item.side}</td>
+            <td>{item.trade_funds}</td>
+            <td>{item.fee}</td>
+          </tr>
+        )
+      })
+    )
+    : null;
+
     return (
       <div className="orderinfo-wrap">
         <span className="coin-title"> PENDING ORDERS </span>
@@ -74,10 +69,28 @@ class Orderinfo extends Component {
               <td>remain_volume</td>
               <td>side</td>
               <td>market_status</td>
-              <td>status</td>
             </tr>
-            {orderinfoArea}
+            {pendingOrderinfoArea}
           </tbody>
+        </table>
+
+        <span className="coin-title"> COMPLETED ORDERS </span>
+        <table className="orderinfo-table">
+          <tbody>
+            <tr>
+              <td>time</td>
+              <td>market</td>
+              <td>currency</td>
+              <td>price</td>
+              <td>volume</td>
+              <td>side</td>
+              <td>trade_funds</td>
+              <td>fee</td>
+            </tr>
+
+            {completedOrderinfoArea}
+          </tbody>
+
         </table>
       </div>
     );

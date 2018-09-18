@@ -12,7 +12,7 @@ class Ordersend extends Component {
       tradeVol : 1
     };
     
-    this.tradeVolList = [1, 0.5, 0.1];
+    this.tradeVolList = [1, 0.75, 0.5, 0.25, 0.1, 0.01];
 
   }
 
@@ -36,7 +36,7 @@ class Ordersend extends Component {
   }
 
   onClickArb = async () => {
-    const {coinName, wallet, orderbook} = this.props;
+    const {coinName, wallet, orderbook, orderRefresh, walletRefresh} = this.props;
 
     const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
     const parseBid = orderbook[`${orderbook.coinName}_BID`].slice(0,10)[0];
@@ -55,15 +55,18 @@ class Ordersend extends Component {
         "price"  : parseAsk.price,
         "volume" : tradeVol
       }
-  
-      // Api.orderSend(buyOrderinfo)
-      // .then((data) => {
-      //   console.log("BUY",data);
-      //   alert(data);
-      // }, (err) => {
-      //   // Need to error control
-      //   console.log("BUY",err);
-      // });
+
+      Api.OrderSend(buyOrderinfo)
+      .then((data) => {
+        console.log("BUY success ",data);
+        orderRefresh();
+        walletRefresh();
+        alert(JSON.stringify(data));
+      }, (err) => {
+        // Need to error control
+        console.log("BUY error ",err);
+        alert(JSON.stringify(err));
+      });
   
       const sellOrderinfo = {
         "market" : element.bidMarket.toUpperCase(),
@@ -73,17 +76,21 @@ class Ordersend extends Component {
         "volume" : tradeVol
       }
   
-      // Api.orderSend(sellOrderinfo)
-      // .then((data) => {
-      //   console.log("SELL",data);
-      //   alert(data);
-      // }, (err) => {
-      //   // Need to error control
-      //   console.log("SELL",err);
-      // });
+      Api.OrderSend(sellOrderinfo)
+      .then((data) => {
+        console.log("SELL success ",data);
+        orderRefresh();
+        walletRefresh();
+        alert(JSON.stringify(data));
+      }, (err) => {
+        // Need to error control
+        console.log("SELL error ",err);
+        alert(JSON.stringify(err));
+      });
 
       console.log(buyOrderinfo);
       console.log(sellOrderinfo);
+
     }
 
   }
@@ -158,7 +165,7 @@ class Ordersend extends Component {
             sellEnable = true;
           }
           else {
-            alert(`판매] 지갑 코인이 부족함, userBalance : ${userBalance}, required : ${tradeVol}`)
+            alert(`[판매] 지갑 코인이 부족함, userBalance : ${userBalance}, required : ${tradeVol}`)
           }
         }
         else {
@@ -227,7 +234,7 @@ class Ordersend extends Component {
 
               </tbody>
             </table>
-            <button className="ordersend-buy-btn" id={"element"} onClick={this.onClickBuy}>BUY</button>
+            {/* <button className="ordersend-buy-btn" id={"element"} onClick={this.onClickBuy}>BUY</button> */}
           </Fragment>
         )
       }
@@ -266,7 +273,7 @@ class Ordersend extends Component {
                 </tr>
               </tbody>
             </table>
-            <button className="ordersend-sell-btn" id={"element"} onClick={this.onClickSell}>SELL</button>
+            {/* <button className="ordersend-sell-btn" id={"element"} onClick={this.onClickSell}>SELL</button> */}
 
           </Fragment>
         )
@@ -285,12 +292,21 @@ class Ordersend extends Component {
 
         return (
           <Fragment>
-            <p style={{color:"whiteSmoke" , fontSize : "20px"}}>
-              Trade Volume : { tradeVol }
-            </p>
-            <p style={{color:"whiteSmoke" , fontSize : "20px"}}>
-              Profit : ₩ { util.expressKRW(profit) }
-            </p>
+            <div>
+              <table className="ordersend-arbi-table">
+                <tbody>
+                  <tr>
+                    <td style={{color:"whiteSmoke" , fontSize : "16px", textAlign:"left"}}>Trade Volume</td>
+                    <td style={{color:"gold" , fontSize : "16px"}}>{ tradeVol }</td>
+                  </tr>
+                  <tr>
+                    <td style={{color:"whiteSmoke" , fontSize : "16px", textAlign:"left"}}>Profit</td>
+                    <td style={{color:"gold" , fontSize : "16px"}}>₩ { util.expressKRW(profit) }</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
             <button className="ordersend-arbi-btn" id={"ARBITRAGE"} onClick={this.onClickArb}>ARBITRAGE</button>
 
           </Fragment>
