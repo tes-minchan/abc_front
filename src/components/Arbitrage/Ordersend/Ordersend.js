@@ -40,8 +40,8 @@ class Ordersend extends Component {
 
     const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
     const parseBid = orderbook[`${orderbook.coinName}_BID`].slice(0,10)[0];
-    const element = this.calculateBenefit(orderbook);
-    const tradeVol = util.convertFloatDigit(Number(element.minimumVol * this.state.tradeVol), 4);
+    const element = this.calculateBenefit(orderbook, wallet);
+    const tradeVol = util.convertFloatDigit(Number(element.tradeVol * this.state.tradeVol), 4);
 
     let buyEnable = await this.checkAskVolume(coinName, element, parseAsk, tradeVol, wallet);
     let sellEnable = await this.checkBidVolume(coinName, element, parseBid, tradeVol, wallet);
@@ -52,7 +52,7 @@ class Ordersend extends Component {
         "market" : element.askMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "BUY",
-        "price"  : parseAsk.price,
+        "price"  : parseAsk.price * 2,
         "volume" : tradeVol
       }
 
@@ -72,7 +72,7 @@ class Ordersend extends Component {
         "market" : element.bidMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "SELL",
-        "price"  : parseBid.price,
+        "price"  : parseBid.price / 2,
         "volume" : tradeVol
       }
   
@@ -177,8 +177,7 @@ class Ordersend extends Component {
   }
 
 
-  calculateBenefit = (orderbook) => {
-
+  calculateBenefit = (orderbook, wallet) => {
     let returnData = {}
 
     const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
@@ -193,8 +192,14 @@ class Ordersend extends Component {
 
     returnData.minimumVol = Number(returnData.askVolume) > Number(returnData.bidVolume) ? returnData.bidVolume : returnData.askVolume;
 
-    returnData.requiredFiatFunds = returnData.askPrice * (returnData.minimumVol * this.state.tradeVol);
-    returnData.requiredCoinFunds = returnData.minimumVol * ( returnData.bidPrice * this.state.tradeVol);
+    const availBuy  = wallet[parseAsk.market].KRW ? wallet[parseAsk.market].KRW.available : 0;
+    const availSell = wallet[parseBid.market][orderbook.coinName.substring(0,3)] ? wallet[parseBid.market][orderbook.coinName.substring(0,3)].available : 0;
+
+    returnData.tradeVol = availBuy/parseAsk.price > availSell ? availSell : availBuy/parseAsk.price;
+    returnData.tradeVol = returnData.tradeVol > returnData.minimumVol ? returnData.minimumVol : returnData.tradeVol;
+
+    returnData.requiredFiatFunds = returnData.askPrice * (returnData.tradeVol * this.state.tradeVol);
+    returnData.requiredCoinFunds = returnData.tradeVol * this.state.tradeVol;
 
     return returnData;
   }
@@ -204,7 +209,7 @@ class Ordersend extends Component {
 
     const buyArea = () =>  {
       if(wallet && orderbook) {
-        const element = this.calculateBenefit(orderbook);
+        const element = this.calculateBenefit(orderbook, wallet);
 
         return (
           <Fragment>
@@ -245,7 +250,8 @@ class Ordersend extends Component {
 
     const sellArea = () =>  {
       if(wallet && orderbook) {
-        const element = this.calculateBenefit(orderbook);
+        const element = this.calculateBenefit(orderbook, wallet);
+
         return (
           <Fragment>
             <span className="ordersend-market-title" style={{color : "rgb(82, 176, 120)"}}>{ element.bidMarket }</span>
@@ -256,8 +262,8 @@ class Ordersend extends Component {
                   <td style={{ color:"gold", textAlign:"right" }}> { wallet[element.bidMarket][coinName] ? wallet[element.bidMarket][coinName].available : 0 } {coinName}</td>
                 </tr>
                 <tr>
-                  <td style={{ textAlign:"left"}}>Required Funds</td>
-                  <td style={{ color:"gold", textAlign:"right" }}> ₩ { element.requiredCoinFunds ? util.expressKRW(element.requiredCoinFunds) : 0 }</td>
+                  <td style={{ textAlign:"left"}}>Required Coin</td>
+                  <td style={{ color:"gold", textAlign:"right" }}> { element.requiredCoinFunds ? util.convertFloatDigit(element.requiredCoinFunds, 5) : 0 }</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>Price </td>
@@ -285,8 +291,8 @@ class Ordersend extends Component {
 
     const arbitrageArea = () => {
       if(wallet && orderbook) {
-        const element = this.calculateBenefit(orderbook);
-        const tradeVol = util.convertFloatDigit(element.minimumVol * this.state.tradeVol, 4);
+        const element = this.calculateBenefit(orderbook, wallet);
+        const tradeVol = util.convertFloatDigit(element.tradeVol * this.state.tradeVol, 6);
         let profit = Number(element.bidPrice) - Number(element.askPrice);
         profit = profit * tradeVol;
 

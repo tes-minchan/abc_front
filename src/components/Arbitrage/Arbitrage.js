@@ -159,7 +159,6 @@ class Arbitrage extends Component {
     Api.GetBalance(this.token)
     .then(data => {
       if(data) {
-        alert("wallet refresh success");
         this.setState({
           wallet: data.message
         });
@@ -172,12 +171,10 @@ class Arbitrage extends Component {
   }
 
   onClickRefreshOrderinfo = () => {
-    console.log(1, "onClickRefreshOrderinfo");
     if(this.token) {
-      console.log(2, "onClickRefreshOrderinfo");
-
       Api.RefreshOrders(this.token)
         .then(res => {
+          
           Api.GetOrderinfo(this.token)
           .then(res => {
             this.setState({
