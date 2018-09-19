@@ -46,13 +46,28 @@ class Ordersend extends Component {
     let buyEnable = await this.checkAskVolume(coinName, element, parseAsk, tradeVol, wallet);
     let sellEnable = await this.checkBidVolume(coinName, element, parseBid, tradeVol, wallet);
 
+
+    
+    
     if(sellEnable && buyEnable) {
+
+      let askPriceThreshold = 0;
+      let bidPriceThreshold = 0;
+
+      if(element.askMarket === 'UPBIT') {
+        askPriceThreshold = Number(config.orderinfo[element.askMarket][coinName].minVol) * 20;
+        bidPriceThreshold = Number(config.orderinfo[element.bidMarket][coinName].minVol) * 20;
+      }
+      else {
+        askPriceThreshold = Math.pow(10,Math.abs(Math.log10(Number(config.orderinfo[element.askMarket][coinName].minVol)))) * 20;
+        bidPriceThreshold = Math.pow(10,Math.abs(Math.log10(Number(config.orderinfo[element.bidMarket][coinName].minVol)))) * 20;
+      }
 
       const buyOrderinfo = {
         "market" : element.askMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "BUY",
-        "price"  : (parseAsk.price * 2).toString(),
+        "price"  : (Number(parseAsk.price) + Number(askPriceThreshold)).toString(),
         "volume" : tradeVol.toString()
       }
 
@@ -61,7 +76,6 @@ class Ordersend extends Component {
         console.log("BUY success ",data);
         orderRefresh();
         walletRefresh();
-        alert(JSON.stringify(data));
       }, (err) => {
         // Need to error control
         console.log("BUY error ",err);
@@ -72,7 +86,7 @@ class Ordersend extends Component {
         "market" : element.bidMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "SELL",
-        "price"  : (parseBid.price / 2).toString(),
+        "price"  : (Number(parseBid.price) - Number(bidPriceThreshold)).toString(),
         "volume" : tradeVol.toString()
       }
   
@@ -81,7 +95,6 @@ class Ordersend extends Component {
         console.log("SELL success ",data);
         orderRefresh();
         walletRefresh();
-        alert(JSON.stringify(data));
       }, (err) => {
         // Need to error control
         console.log("SELL error ",err);
@@ -263,7 +276,7 @@ class Ordersend extends Component {
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>Required Coin</td>
-                  <td style={{ color:"gold", textAlign:"right" }}> { element.requiredCoinFunds ? util.convertFloatDigit(element.requiredCoinFunds, 5) : 0 }</td>
+                  <td style={{ color:"gold", textAlign:"right" }}> { element.requiredCoinFunds ? util.convertFloatDigit(element.requiredCoinFunds, 4) : 0 }</td>
                 </tr>
                 <tr>
                   <td style={{ textAlign:"left"}}>Price </td>
@@ -292,7 +305,7 @@ class Ordersend extends Component {
     const arbitrageArea = () => {
       if(wallet && orderbook) {
         const element = this.calculateBenefit(orderbook, wallet);
-        const tradeVol = util.convertFloatDigit(element.tradeVol * this.state.tradeVol, 6);
+        const tradeVol = util.convertFloatDigit(element.tradeVol * this.state.tradeVol, 4);
         let profit = Number(element.bidPrice) - Number(element.askPrice);
         profit = profit * tradeVol;
 
