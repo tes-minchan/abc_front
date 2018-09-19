@@ -17,9 +17,11 @@ class Orderinfo extends Component {
     const pendingOrderinfoArea = pendingOrders ? 
       (
         pendingOrders.map(item => {
+          const parseDate = new Date(item.reg_date);
+
           return (
             <tr>
-              <td>{item.reg_date}</td>
+              <td>{parseDate.toLocaleString()}</td>
               <td>{item.market}</td>
               <td>{item.currency}</td>
               <td>{item.price}</td>
@@ -36,10 +38,12 @@ class Orderinfo extends Component {
 
     const completedOrderinfoArea = completedOrders ? 
     (
+      
       completedOrders.map(item => {
+        const parseDate = new Date(item.trade_date);
         return (
           <tr>
-            <td>{item.trade_date}</td>
+            <td>{parseDate.toLocaleString()}</td>
             <td>{item.market}</td>
             <td>{item.currency}</td>
             <td>{item.price}</td>
