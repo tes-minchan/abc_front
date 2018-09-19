@@ -53,7 +53,7 @@ class Ordersend extends Component {
         "coin"   : coinName.toUpperCase(),
         "side"   : "BUY",
         "price"  : (parseAsk.price * 2).toString(),
-        "volume" : tradeVol
+        "volume" : tradeVol.toString()
       }
 
       Api.OrderSend(buyOrderinfo)
@@ -73,7 +73,7 @@ class Ordersend extends Component {
         "coin"   : coinName.toUpperCase(),
         "side"   : "SELL",
         "price"  : (parseBid.price / 2).toString(),
-        "volume" : tradeVol
+        "volume" : tradeVol.toString()
       }
   
       Api.OrderSend(sellOrderinfo)
