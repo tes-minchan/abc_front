@@ -52,7 +52,7 @@ class Ordersend extends Component {
         "market" : element.askMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "BUY",
-        "price"  : parseAsk.price * 2,
+        "price"  : (parseAsk.price * 2).toString(),
         "volume" : tradeVol
       }
 
@@ -72,7 +72,7 @@ class Ordersend extends Component {
         "market" : element.bidMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "SELL",
-        "price"  : parseBid.price / 2,
+        "price"  : (parseBid.price / 2).toString(),
         "volume" : tradeVol
       }
   
