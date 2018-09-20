@@ -20,20 +20,6 @@ class Ordersend extends Component {
     this.setState({ tradeVol : Number(e.target.id) })
   }
 
-  onClickBuy = () => {
-    const {coinName, wallet, orderbook} = this.props;
-
-    const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
-    const element = this.calculateBenefit(orderbook);
-
-    console.log("onClickBuy");
-    console.log(parseAsk.price, parseAsk.volume, element.askMarket, element.minimumVol);
-
-  }
-
-  onClickSell = () => {
-    console.log("onClickSell");
-  }
 
   onClickArb = async () => {
     const {coinName, wallet, orderbook, orderRefresh, walletRefresh} = this.props;
@@ -46,60 +32,45 @@ class Ordersend extends Component {
     let buyEnable = await this.checkAskVolume(coinName, element, parseAsk, tradeVol, wallet);
     let sellEnable = await this.checkBidVolume(coinName, element, parseBid, tradeVol, wallet);
 
-
-    
-    
     if(sellEnable && buyEnable) {
-
-      let askPriceThreshold = 0;
-      let bidPriceThreshold = 0;
-
-      if(element.askMarket === 'UPBIT') {
-        askPriceThreshold = Number(config.orderinfo[element.askMarket][coinName].minVol) * 20;
-        bidPriceThreshold = Number(config.orderinfo[element.bidMarket][coinName].minVol) * 20;
-      }
-      else {
-        askPriceThreshold = Math.pow(10,Math.abs(Math.log10(Number(config.orderinfo[element.askMarket][coinName].minVol)))) * 20;
-        bidPriceThreshold = Math.pow(10,Math.abs(Math.log10(Number(config.orderinfo[element.bidMarket][coinName].minVol)))) * 20;
-      }
-
-      const buyOrderinfo = {
+      
+      let buyOrderinfo = {
         "market" : element.askMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "BUY",
-        "price"  : (Number(parseAsk.price) + Number(askPriceThreshold)).toString(),
+        "price"  : element.askOrderPrice,
         "volume" : tradeVol.toString()
       }
 
-      Api.OrderSend(buyOrderinfo)
-      .then((data) => {
-        console.log("BUY success ",data);
-        orderRefresh();
-        walletRefresh();
-      }, (err) => {
-        // Need to error control
-        console.log("BUY error ",err);
-        alert(JSON.stringify(err));
-      });
-  
+      // Api.OrderSend(buyOrderinfo)
+      // .then((data) => {
+      //   console.log("BUY success ",data);
+      //   orderRefresh();
+      //   walletRefresh();
+      // }, (err) => {
+      //   // Need to error control
+      //   console.log("BUY error ",err);
+      //   alert(JSON.stringify(err));
+      // });
+
       const sellOrderinfo = {
         "market" : element.bidMarket.toUpperCase(),
         "coin"   : coinName.toUpperCase(),
         "side"   : "SELL",
-        "price"  : (Number(parseBid.price) - Number(bidPriceThreshold)).toString(),
+        "price"  : element.bidOrderPrice,
         "volume" : tradeVol.toString()
       }
   
-      Api.OrderSend(sellOrderinfo)
-      .then((data) => {
-        console.log("SELL success ",data);
-        orderRefresh();
-        walletRefresh();
-      }, (err) => {
-        // Need to error control
-        console.log("SELL error ",err);
-        alert(JSON.stringify(err));
-      });
+      // Api.OrderSend(sellOrderinfo)
+      // .then((data) => {
+      //   console.log("SELL success ",data);
+      //   orderRefresh();
+      //   walletRefresh();
+      // }, (err) => {
+      //   // Need to error control
+      //   console.log("SELL error ",err);
+      //   alert(JSON.stringify(err));
+      // });
 
       console.log(buyOrderinfo);
       console.log(sellOrderinfo);
@@ -192,6 +163,7 @@ class Ordersend extends Component {
 
   calculateBenefit = (orderbook, wallet) => {
     let returnData = {}
+    let priceCount = 0;
 
     const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
     const parseBid = orderbook[`${orderbook.coinName}_BID`].slice(0,10)[0];
@@ -199,6 +171,25 @@ class Ordersend extends Component {
     returnData.askPrice  = parseAsk.price;
     returnData.askVolume = parseAsk.volume;
     returnData.askMarket = parseAsk.market;
+
+    orderbook[`${orderbook.coinName}_ASK`].forEach(item => {
+      if(item.market === parseAsk.market) {
+        if(priceCount++ > 2) {
+          returnData.askOrderPrice  = item.price;
+          return;
+        }
+      }
+    });
+
+    orderbook[`${orderbook.coinName}_BID`].forEach(item => {
+      if(item.market === parseAsk.market) {
+        if(priceCount++ > 2) {
+          returnData.bidOrderPrice  = item.price;
+          return;
+        }
+      }
+    });
+
     returnData.bidPrice  = parseBid.price;
     returnData.bidVolume = parseBid.volume;
     returnData.bidMarket = parseBid.market;
@@ -211,7 +202,7 @@ class Ordersend extends Component {
     returnData.tradeVol = availBuy/parseAsk.price > availSell ? availSell : availBuy/parseAsk.price;
     returnData.tradeVol = returnData.tradeVol > returnData.minimumVol ? returnData.minimumVol : returnData.tradeVol;
 
-    returnData.requiredFiatFunds = returnData.askPrice * (returnData.tradeVol * this.state.tradeVol);
+    returnData.requiredFiatFunds = returnData.askOrderPrice * (returnData.tradeVol * this.state.tradeVol);
     returnData.requiredCoinFunds = returnData.tradeVol * this.state.tradeVol;
 
     return returnData;

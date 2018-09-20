@@ -1,0 +1,41 @@
+.wallet-wrapper {
+  display: inline-block;
+  margin-top: 10px;
+  
+}
+
+.wallet-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  padding-top : 6px;
+  padding-bottom : 6px;
+  font-size: 15px;
+  color: whitesmoke;
+  width:100%;
+}
+
+.wallet-table td, th{
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+
+  text-align: right;
+  padding: 10px;
+
+}
+
+
+.wallet-refresh-btn {
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
+  width: 200px;
+  background: rgb(82, 176, 120);
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 17px;
+  transition: all 0.3s;
+  margin-top: 15px;
+  font-weight: 400;
+  height: 30px;
+  padding-top: 3px;
+}

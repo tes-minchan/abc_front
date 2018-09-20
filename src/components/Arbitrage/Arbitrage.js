@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router-dom'
 
 import _ from 'lodash';
@@ -11,6 +11,7 @@ import Orderbook from './Orderbook';
 import Coinprofit from './Coinprofit';
 import Ordersend from './Ordersend';
 import Orderinfo from './Orderinfo';
+import Header from '../Header';
 
 class Arbitrage extends Component {
 
@@ -159,6 +160,7 @@ class Arbitrage extends Component {
     Api.GetBalance(this.token)
     .then(data => {
       if(data) {
+        console.log(data);
         this.setState({
           wallet: data.message
         });
@@ -174,7 +176,7 @@ class Arbitrage extends Component {
     if(this.token) {
       Api.RefreshOrders(this.token)
         .then(res => {
-          
+
           Api.GetOrderinfo(this.token)
           .then(res => {
             this.setState({
@@ -219,56 +221,56 @@ class Arbitrage extends Component {
     else {
 
       return (
-        <div className="arbitrage-wrapper">
-          <span className="coin-title"> { this.state.orderbook ? this.state.orderbook.coinName : null} </span>
-          <p>
-            {
-              this.coinList.map(coin => {
-                if(coin === this.state.subscribeCoin) {
-                  return <button className="coin-selected-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
-                }
-                else {
-                  return <button className="coin-select-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
-                }
-              })
-            }
-          </p>
-
-          <p>
-            <Coinprofit coinName={this.state.subscribeCoin} orderbook = {this.state.orderbook}/>
-          </p>
-  
-          <div className="arbitrage-grid-container">
-  
-            <div className="arbitrage-grid-item">
-              <Orderbook orderbook={this.state.orderbook} />
+        <Fragment>
+          <Header />
+          <div className="arbitrage-wrapper">
+            {/* <span className="coin-title"> { this.state.orderbook ? this.state.orderbook.coinName : null} </span> */}
+              {
+                this.coinList.map(coin => {
+                  if(coin === this.state.subscribeCoin) {
+                    return <button className="coin-selected-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
+                  }
+                  else {
+                    return <button className="coin-select-button" id={coin} onClick={this.onClickSelCoin}>{coin}</button>
+                  }
+                })
+              }
+            <div>
+              <Coinprofit coinName={this.state.subscribeCoin} orderbook = {this.state.orderbook}/>
             </div>
-            
-            <div className="arbitrage-grid-item">
-              <button className="coin-select-button" onClick={this.onClickRefreshWallet}> WALLET REFRESH </button>
-              <br /><br />
+    
+            <div className="arbitrage-grid-container">
+    
+              <div className="arbitrage-grid-item">
+                <Orderbook orderbook={this.state.orderbook} />
+              </div>
+              
+              <div className="arbitrage-grid-item">
+                <button className="coin-select-button" onClick={this.onClickRefreshWallet}> WALLET REFRESH </button>
+                <br /><br />
 
-              <Ordersend 
-                coinName  = {this.state.subscribeCoin} 
-                wallet    = {this.state.wallet ? this.state.wallet : null} 
-                orderbook = {this.state.orderbook}
-                orderRefresh = {this.onClickRefreshOrderinfo}
-                walletRefresh = {this.onClickRefreshWallet}
+                <Ordersend 
+                  coinName  = {this.state.subscribeCoin} 
+                  wallet    = {this.state.wallet ? this.state.wallet : null} 
+                  orderbook = {this.state.orderbook}
+                  orderRefresh = {this.onClickRefreshOrderinfo}
+                  walletRefresh = {this.onClickRefreshWallet}
+                />
+              </div>
+    
+            </div>
+            <button className="coin-select-button" onClick={this.onClickRefreshOrderinfo}> Order Refresh </button>
+
+            <div style={{color:"white"}}>
+              <Orderinfo 
+                pendingOrders = {this.state.pendding_orders ? this.state.pendding_orders : null } 
+                completedOrders = {this.state.completed_orders ? this.state.completed_orders : null }
               />
+
             </div>
-  
+    
           </div>
-          <button className="coin-select-button" onClick={this.onClickRefreshOrderinfo}> Order Refresh </button>
-
-          <div style={{color:"white"}}>
-            <Orderinfo 
-              pendingOrders = {this.state.pendding_orders ? this.state.pendding_orders : null } 
-              completedOrders = {this.state.completed_orders ? this.state.completed_orders : null }
-            />
-
-          </div>
-  
-        </div>
+        </Fragment>
       );
     }
   }

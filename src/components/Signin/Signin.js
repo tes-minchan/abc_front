@@ -52,15 +52,9 @@ class Signin extends Component {
       return (
         <div className="form-wrapper">
           <h1> Signin</h1>
-          <p>
-            <input type="text" className="form-text" name="id" placeholder="ID" required="" onChange={this.onChange('id')}/>
-          </p>
-          <p>
-            <input type="password" className="form-text" name="pwd" placeholder="PASSWORD" required="" onChange={this.onChange('password')} />
-          </p>
-          <p>
-            <button className="signin-button" onClick={this.onClickSignin}>Sign In</button>
-          </p>
+          <input type="text" name="id" placeholder="ID" required="" onChange={this.onChange('id')}/><br />
+          <input type="password" name="pwd" placeholder="PASSWORD" required="" onChange={this.onChange('password')} /><br />
+          <button className="signin-button" onClick={this.onClickSignin}>Sign In</button>
         </div>
       );
     }
