@@ -42,16 +42,16 @@ class Ordersend extends Component {
         "volume" : tradeVol.toString()
       }
 
-      // Api.OrderSend(buyOrderinfo)
-      // .then((data) => {
-      //   console.log("BUY success ",data);
-      //   orderRefresh();
-      //   walletRefresh();
-      // }, (err) => {
-      //   // Need to error control
-      //   console.log("BUY error ",err);
-      //   alert(JSON.stringify(err));
-      // });
+      Api.OrderSend(buyOrderinfo)
+      .then((data) => {
+        console.log("BUY success ",data);
+        orderRefresh();
+        walletRefresh();
+      }, (err) => {
+        // Need to error control
+        console.log("BUY error ",err);
+        alert(JSON.stringify(err));
+      });
 
       const sellOrderinfo = {
         "market" : element.bidMarket.toUpperCase(),
@@ -61,16 +61,16 @@ class Ordersend extends Component {
         "volume" : tradeVol.toString()
       }
   
-      // Api.OrderSend(sellOrderinfo)
-      // .then((data) => {
-      //   console.log("SELL success ",data);
-      //   orderRefresh();
-      //   walletRefresh();
-      // }, (err) => {
-      //   // Need to error control
-      //   console.log("SELL error ",err);
-      //   alert(JSON.stringify(err));
-      // });
+      Api.OrderSend(sellOrderinfo)
+      .then((data) => {
+        console.log("SELL success ",data);
+        orderRefresh();
+        walletRefresh();
+      }, (err) => {
+        // Need to error control
+        console.log("SELL error ",err);
+        alert(JSON.stringify(err));
+      });
 
       console.log(buyOrderinfo);
       console.log(sellOrderinfo);

@@ -21,11 +21,15 @@ export default class Header extends Component {
     return (
       <div className="header">
         <Nav>
+
           <NavItem>
             <NavLink href="/" style={{color:"white"}} >HOME</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/arbitrage" style={{color:"white"}}>ARBITRAGE</NavLink>
+            <NavLink href="/arbitrage-korea" style={{color:"white"}}>ARBITRAGE-KOREA</NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="/arbitrage-abroad" style={{color:"white"}}>ARBITRAGE-ABROAD</NavLink>
           </NavItem>
           <NavItem>
             <NavLink href="/wallet" style={{color:"white"}}>WALLET</NavLink>

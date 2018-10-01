@@ -23,7 +23,7 @@ class Wallet extends Component {
     if(this.token) {
       Api.GetBalance(this.token)
         .then(data => {
-
+          console.log(data);
           if(data.success) {
             this.setState({
               wallet: data.message

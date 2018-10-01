@@ -11,7 +11,7 @@ ReactDOM.render(
   <Router>
     <div>
       <Route exact path="/" component={App} />
-      <Route path="/arbitrage" component={Arbitrage}/>
+      <Route path="/arbitrage-korea" component={Arbitrage}/>
       <Route path="/wallet" component={Wallet}/>
 
     </div>

@@ -46,7 +46,7 @@ class Signin extends Component {
 
   render() {
     if(this.state.redirect) {
-      return <Redirect to='/arbitrage' />
+      return <Redirect to='/arbitrage-korea' />
     }
     else {
       return (
