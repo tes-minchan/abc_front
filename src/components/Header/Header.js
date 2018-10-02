@@ -29,10 +29,10 @@ export default class Header extends Component {
             <NavLink href="/arbitrage-korea" style={{color:"white"}}>ARBITRAGE-KOREA</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/arbitrage-abroad" style={{color:"white"}}>ARBITRAGE-ABROAD</NavLink>
+            <NavLink href="/wallet" style={{color:"white"}}>WALLET</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/wallet" style={{color:"white"}}>WALLET</NavLink>
+            <NavLink href="/arbitrage-triangle" style={{color:"white"}}>TRIANGLE-ARB</NavLink>
           </NavItem>
 
         </Nav>

@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import App from './components/App';
 import Arbitrage from './components/Arbitrage';
 import Wallet from './components/Wallet';
+import Arbitrage_Triangle from './components/Arbitrage-Triangle';
+
 
 ReactDOM.render(
   <Router>
@@ -13,6 +15,7 @@ ReactDOM.render(
       <Route exact path="/" component={App} />
       <Route path="/arbitrage-korea" component={Arbitrage}/>
       <Route path="/wallet" component={Wallet}/>
+      <Route path="/arbitrage-triangle" component={Arbitrage_Triangle}/>
 
     </div>
   </Router>,

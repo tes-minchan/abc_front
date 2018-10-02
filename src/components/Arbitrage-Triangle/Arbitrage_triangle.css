@@ -1,0 +1,22 @@
+.arbitriangle-wrapper {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.arbitriangle-table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 600px;
+  padding-top : 6px;
+  padding-bottom : 6px;
+  font-size: 15px;
+  color:white;
+}
+
+.arbitriangle-table td, th{
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+
+  text-align: center;
+  padding: 1px;
+}
