@@ -14,6 +14,8 @@ export const orderinfo = {
     ZIL : { minVol : 10 },
     ZRX : { minVol : 1 },
     REP : { minVol : 0.1 },
+    XLM : { minVol : 1 }
+
   },
 
   COINONE : {
@@ -30,6 +32,8 @@ export const orderinfo = {
     ZIL : { minVol : 1 },
     ZRX : { minVol : 1 },
     REP : { minVol : "not support" },
+    XLM : { minVol : 1 }
+
   },
 
   GOPAX : {
@@ -46,6 +50,7 @@ export const orderinfo = {
     ZIL : { minVol : 1 },
     ZRX : { minVol : 1 },
     REP : { minVol : 1 },
+    XLM : { minVol : 1 }
   },
 
   UPBIT : {
@@ -62,6 +67,7 @@ export const orderinfo = {
     ZIL : { minVol : 500 },
     ZRX : { minVol : 500 },
     REP : { minVol : 500 },
+    XLM : { minVol : 500 }
   }
 
 }

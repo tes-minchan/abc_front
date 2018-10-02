@@ -23,7 +23,7 @@ class Arbitrage extends Component {
       redirect : false
     };
 
-    this.coinList = [ 'BTC' , 'BCH' , 'EOS' , 'ETC' , 'ETH' , 'LTC' , 'OMG' , 'QTUM' , 'XRP' , 'ZIL'];
+    this.coinList = [ 'BTC' , 'BCH' , 'EOS' , 'ETC' , 'ETH' , 'LTC' , 'OMG' , 'QTUM' , 'XRP' , 'ZIL', 'XLM'];
   }
 
   componentDidMount() {

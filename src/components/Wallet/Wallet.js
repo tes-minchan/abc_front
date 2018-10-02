@@ -14,17 +14,30 @@ class Wallet extends Component {
     this.state = {
     };
 
-    this.coinList = [ 'KRW', 'BTC' , 'BCH' , 'EOS' , 'ETC' , 'ETH' , 'LTC' , 'OMG' , 'QTUM' , 'XRP' , 'ZIL'];
+    this.coinList = [ 'KRW', 'BTC' , 'BCH' , 'EOS' , 'ETC' , 'ETH' , 'LTC' , 'OMG' , 'QTUM' , 'XRP' , 'ZIL' , 'XLM'];
   }
 
   componentDidMount() {
     this.token = sessionStorage.getItem('token');
+    let toSetData = [];
 
     if(this.token) {
       Api.GetBalance(this.token)
         .then(data => {
-          console.log(data);
+
           if(data.success) {
+            data.message['TOTAL'] = {};
+            this.coinList.forEach(coin => {
+              let sumCoin = 0;
+
+              _.forEach(data.message, (element, market) => {
+                const coinBalance = element[coin] ? Number(element[coin].available) : 0;
+                sumCoin += Number(coinBalance);
+
+              });
+              data.message['TOTAL'][coin] = sumCoin;
+            });
+
             this.setState({
               wallet: data.message
             });
@@ -61,22 +74,43 @@ class Wallet extends Component {
 
     const walletArea = this.state.wallet ? (
       _.map(this.state.wallet, (item, market) => {
-        return (
-          <tr>
-            <td style={{color:"rgb(82, 176, 120)"}}>{market}</td>
-            {
-              this.coinList.map(coin => {
-                if(coin === 'KRW') {
-                  //  util.expressKRW
-                  return (<td> ₩ { item[coin] ? util.expressKRW(item[coin].available) : 0 }</td>)
-                }
-                else {
-                  return (<td>{ item[coin] ? item[coin].available : 0 }</td>)
-                }
-              })
-            }
-          </tr>
-        )
+
+        if(market === 'TOTAL') {
+          return (
+            <tr>
+              <td style={{color:"#e17055"}}>{market}</td>
+              {
+                this.coinList.map(coin => {
+                  if(coin === 'KRW') {
+                    //  util.expressKRW
+                    return (<td> ₩ { item[coin] ? util.expressKRW(item[coin]) : 0 }</td>)
+                  }
+                  else {
+                    return (<td>{ item[coin] ? util.convertFloatDigit(item[coin], 8) : 0 }</td>)
+                  }
+                })
+              }
+            </tr>
+          )
+        }
+        else {
+          return (
+            <tr>
+              <td style={{color:"rgb(82, 176, 120)"}}>{market}</td>
+              {
+                this.coinList.map(coin => {
+                  if(coin === 'KRW') {
+                    //  util.expressKRW
+                    return (<td> ₩ { item[coin] ? util.expressKRW(item[coin].available) : 0 }</td>)
+                  }
+                  else {
+                    return (<td>{ item[coin] ? item[coin].available : 0 }</td>)
+                  }
+                })
+              }
+            </tr>
+          )
+        }
       })
     ) : null;
 
