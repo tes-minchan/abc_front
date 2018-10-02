@@ -180,7 +180,8 @@ class Ordersend extends Component {
         }
       }
     });
-
+    
+    priceCount = 0;
     orderbook[`${orderbook.coinName}_BID`].forEach(item => {
       if(item.market === parseAsk.market) {
         if(priceCount++ > 2) {
