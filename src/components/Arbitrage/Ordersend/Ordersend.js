@@ -164,16 +164,44 @@ class Ordersend extends Component {
   calculateBenefit = (orderbook, wallet) => {
     let returnData = {}
     let priceCount = 0;
+    const coinName = orderbook.coinName.replace('KRW','');
 
-    const parseAsk = orderbook[`${orderbook.coinName}_ASK`].slice(0,10)[0];
-    const parseBid = orderbook[`${orderbook.coinName}_BID`].slice(0,10)[0];
+    returnData.askPrice = orderbook[`${orderbook.coinName}_ASK`][0].price;
+    returnData.askVolume = orderbook[`${orderbook.coinName}_ASK`][0].volume;
+    returnData.askMarket = orderbook[`${orderbook.coinName}_ASK`][0].market;
+    returnData.askBalance = wallet[returnData.askMarket]['KRW'] ? wallet[returnData.askMarket]['KRW'].available : 0;
 
-    returnData.askPrice  = parseAsk.price;
-    returnData.askVolume = parseAsk.volume;
-    returnData.askMarket = parseAsk.market;
+    const askFilter = orderbook[`${orderbook.coinName}_ASK`].filter((item) => item.price === returnData.askPrice);
+
+    askFilter.forEach(item => {
+      const marketBalance = wallet[item.market]['KRW'] ? wallet[item.market]['KRW'].available : 0;
+      if(returnData.askBalance < marketBalance) {
+        returnData.askPrice   = item.price;
+        returnData.askVolume  = item.volume;
+        returnData.askMarket  = item.market;
+        returnData.askBalance = marketBalance;
+      }
+    });
+
+    returnData.bidPrice  = orderbook[`${orderbook.coinName}_BID`][0].price;
+    returnData.bidVolume = orderbook[`${orderbook.coinName}_BID`][0].volume;
+    returnData.bidMarket = orderbook[`${orderbook.coinName}_BID`][0].market;
+    returnData.bidBalance = wallet[returnData.bidMarket][coinName] ? wallet[returnData.bidMarket][coinName].available : 0;
+
+    const bidFilter = orderbook[`${orderbook.coinName}_BID`].filter((item) => item.price === returnData.bidPrice);
+
+    bidFilter.forEach(item => {
+      const marketBalance = wallet[item.market][coinName] ? wallet[item.market][coinName].available : 0;
+      if(returnData.bidBalance < marketBalance) {
+        returnData.bidPrice   = item.price;
+        returnData.bidVolume  = item.volume;
+        returnData.bidMarket  = item.market;
+        returnData.bidBalance = marketBalance;
+      }
+    });
 
     orderbook[`${orderbook.coinName}_ASK`].forEach(item => {
-      if(item.market === parseAsk.market) {
+      if(item.market === returnData.askMarket) {
         if(priceCount++ > 2) {
           returnData.askOrderPrice  = item.price;
           return;
@@ -183,7 +211,7 @@ class Ordersend extends Component {
     
     priceCount = 0;
     orderbook[`${orderbook.coinName}_BID`].forEach(item => {
-      if(item.market === parseAsk.market) {
+      if(item.market === returnData.bidMarket) {
         if(priceCount++ > 2) {
           returnData.bidOrderPrice  = item.price;
           return;
@@ -191,16 +219,12 @@ class Ordersend extends Component {
       }
     });
 
-    returnData.bidPrice  = parseBid.price;
-    returnData.bidVolume = parseBid.volume;
-    returnData.bidMarket = parseBid.market;
-
     returnData.minimumVol = Number(returnData.askVolume) > Number(returnData.bidVolume) ? returnData.bidVolume : returnData.askVolume;
 
-    const availBuy  = wallet[parseAsk.market].KRW ? wallet[parseAsk.market].KRW.available : 0;
-    const availSell = wallet[parseBid.market][orderbook.coinName.substring(0,3)] ? wallet[parseBid.market][orderbook.coinName.substring(0,3)].available : 0;
+    const availBuy  = wallet[returnData.askMarket].KRW ? wallet[returnData.askMarket].KRW.available : 0;
+    const availSell = wallet[returnData.bidMarket][coinName] ? wallet[returnData.bidMarket][coinName].available : 0;
 
-    returnData.tradeVol = availBuy/parseAsk.price > availSell ? availSell : availBuy/parseAsk.price;
+    returnData.tradeVol = availBuy/returnData.askPrice > availSell ? availSell : availBuy/returnData.askPrice;
     returnData.tradeVol = returnData.tradeVol > returnData.minimumVol ? returnData.minimumVol : returnData.tradeVol;
 
     returnData.requiredFiatFunds = returnData.askOrderPrice * (returnData.tradeVol * this.state.tradeVol);
