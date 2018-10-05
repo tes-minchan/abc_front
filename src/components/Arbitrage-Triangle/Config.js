@@ -73,7 +73,17 @@ export const orderinfo = {
   BINANCE : {
     BTC : { minVol : 0.0001 },
     ETH : { minVol : 0.001 }
+  },
+  BITFINEX : {
+    BTC : { minVol : 0.0001 },
+    ETH : { minVol : 0.001 }
+  },
+  HOUBI : {
+    BTC : { minVol : 0.0001 },
+    ETH : { minVol : 0.001 }
   }
+
+
 
 }
 

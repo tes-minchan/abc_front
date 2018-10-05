@@ -51,8 +51,15 @@ export const calculation = (data) => {
   let CycleForTX = getProperCycle_Taker(ask, bid, cycle_drc_alpha, cycle_drc_beta); //맞는 방향과 이격도
   let cycleloss = [];
 
+
+
   let Values = getProperVolumes(CycleForTX, cycleloss, cycle_drc_alpha, cycle_drc_beta, total_currency_index, tgtcrryindex, 
     symbol_vdigit, currency_digit, initvolumes, ask, bid, feetaker);
+
+  if(CycleForTX[0] > 0) {
+    console.log(data);
+    console.log(CycleForTX);
+  }
 
   return {
     values : Values,

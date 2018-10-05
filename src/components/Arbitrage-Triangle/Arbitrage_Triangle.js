@@ -16,7 +16,7 @@ class Arbitrage_Triangle extends Component {
   }
 
   componentDidMount() {
-    console.log(config);
+
     // connect to websocket.
     this.socket = new WebSocket(websocket.URL);
     this.socket.onopen = () => this.onSocketOpen()
@@ -85,7 +85,7 @@ class Arbitrage_Triangle extends Component {
             <td>{item.volume}</td>
           </tr>
         )
-      })
+      });
     }
 
     if(this.state.arbiInfo) {
@@ -94,6 +94,7 @@ class Arbitrage_Triangle extends Component {
           <td>{item}</td>
         );
       });
+      
 
       arbiInfo2Area = this.state.arbiInfo.cycleloss.map(item => {
         return (
@@ -106,6 +107,16 @@ class Arbitrage_Triangle extends Component {
     return (
       <Fragment>
         <Header />
+        <div>
+
+          <select>
+            <option value="volvo">GOPAX</option>
+            <option value="saab">BITHUMB</option>
+            <option value="opel">UPBIT</option>
+            <option value="audi">COINONE</option>
+          </select>
+
+        </div>
         <div className="arbitriangle-wrapper">
           <table className="arbitriangle-table">
             <tbody>
